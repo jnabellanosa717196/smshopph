@@ -13,15 +13,16 @@ app.set('views', './views');
 app.set('view engine', 'hbs');
 
 function getItems(){
-    const ref = firebaseApp.database().ref('/user/user_1');
-    return ref.once('value').then(snapshot => snapshot.val());
+    var ref = firebaseApp.database().ref('/product/');
+    return ref.orderByChild('productStatus').equalTo('active')
+        .once('value').then(snapshot => snapshot.val());
 }
 
 app.get('/', (request, response) => {
     response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-    getItems().then(user => {
-        console.log(user);
-        response.render('index', { user });
+    getItems().then(product => {
+        console.log(product);
+        response.render('index', { product });
     });
 });
 
